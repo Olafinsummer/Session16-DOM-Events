@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bài tập</title>
+</head>
+<body>
+    <!--
+        - Viết javascript khi click button#btnAdd thêm thông tin sinh viên gồm tên (input#txtName), email(input#txtEmail), số điện thoại(input#txtPhone) vào <table>
+        - Xử lý sự kiện double click vào <tr> để xóa thông tin sinh viên, trước khi xóa, bật lên popup confirm, người dùng chọn Yes thì xóa, Cancle thì giữ nguyên.
+        - Khi thêm sinh viên, có kiểm tra không nhập trùng thông tin email và số điện thoại
+    -->
+    <div>
+        <h2>Thêm sinh viên</h2>
+        <div>
+            <input type="text" id="txtName" placeholder="Tên sinh viên">
+            <input type="email" id="txtEmail" placeholder="Email">
+            <input type="number" id="txtPhone" placeholder="Số điện thoại">
+            <button id="btnAdd" onclick="addInfo()">Thêm</button>
+        </div>
+        <table border="1" width="100%">
+            <thead>
+                <tr>
+                    <th>STT</th>
+                    <th>Tên</th>
+                    <th>Email</th>
+                    <th>SĐT</th>
+                </tr>
+            </thead>
+            <tbody id="list"></tbody>
+        </table>
+    </div>
+<script>
+const students = []
+const tbody = document.getElementById('list')
+let sttValue = 0
+function isDuplicated(email, phone) {
+    for (let i = 0; i < students.length; i++) {
+        if (students[i].email === email || students[i].phone === phone) {
+            return true
+        }
+    }
+    return false
+}
+function addInfo() {
+    const nameValue = document.getElementById('txtName').value
+    const emailValue = document.getElementById('txtEmail').value
+    const phoneValue = document.getElementById('txtPhone').value
+
+    if (isDuplicated(emailValue, phoneValue)) {
+        alert('Số điện thoại hoặc email đã tồn tại!')
+        return;
+    }
+    const student = {
+        name: nameValue,
+        email: emailValue,
+        phone: phoneValue
+    }
+    students.push(student);
+    const row = document.createElement('tr')
+    sttValue++;
+    row.innerHTML = `
+            <td>${sttValue}</td>
+            <td>${nameValue}</td>
+            <td>${emailValue}</td>
+            <td>${phoneValue}</td>
+    `
+    row.addEventListener('click', function(e) {
+        if(confirm('Bạn có chắc chắn muốn xóa không?')){
+            row.remove(e.target)    
+        }
+    })
+    tbody.appendChild(row);
+}
+
+</script>
+</body>
+</html>
